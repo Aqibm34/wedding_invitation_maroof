@@ -119,6 +119,7 @@
   main{position:relative;z-index:1;max-width:62rem;margin-inline:auto;
     padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
     padding-block:clamp(1.5rem,5vw,3rem) 0;display:flex;flex-direction:column}
+  main{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='-12 -12 24 24'%3E%3Cpath d='M0 9 C-7 3 -11 -1 -11 -5 C-11 -9 -8 -11 -5.5 -11 C-3 -11 -1 -9.5 0 -7.5 C1 -9.5 3 -11 5.5 -11 C8 -11 11 -9 11 -5 C11 -1 7 3 0 9 Z' fill='%23C98F86' stroke='%23C2A05A' stroke-width='1.4'/%3E%3C/svg%3E") 12 12,auto}
   section{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem}
   .narrow{max-width:34rem;margin-inline:auto}
   .kicker{font-family:var(--caps);font-size:.78rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--rose)}
@@ -552,10 +553,10 @@
         fctx.beginPath(); fctx.arc(p.x,p.y,p.r,0,6.283); fctx.fill();
       }
       for(i=bursts.length-1;i>=0;i--){
-        p = bursts[i]; p.x += p.vx; p.y += p.vy; p.vy += p.kind === "heart" ? .07 : .04; p.vx *= .985; p.life -= p.d;
+        p = bursts[i]; p.x += p.vx; p.y += p.vy; p.vy += p.kind === "heart" ? .07 : p.kind === "trail" ? -.012 : .04; p.vx *= .985; p.life -= p.d;
         if(p.life <= 0){ bursts.splice(i,1); continue; }
         fctx.globalAlpha = Math.max(0,p.life); fctx.fillStyle = p.c;
-        if(p.kind === "heart" && HEART_SM){
+        if((p.kind === "heart" || p.kind === "trail") && HEART_SM){
           fctx.shadowBlur = 0;
           fctx.save(); fctx.translate(p.x,p.y); fctx.rotate(p.rot); fctx.scale(p.r/10,p.r/10); fctx.fill(HEART_SM); fctx.restore();
         } else {
@@ -598,6 +599,16 @@
     if(gy !== null && Math.abs(gy - e.touches[0].clientY) > 40){ gy = null; openGate(); }
   }, {passive:true});
   gate.addEventListener("wheel", function(e){ if(Math.abs(e.deltaY) > 20) openGate(); }, {passive:true});
+
+  /* mouse heart trail */
+  var lastTrail = 0, trailCols = ["#C98F86","#E8B4AE","#D9534F","#C2A05A","#F1DFAE"];
+  document.addEventListener("pointermove", function(e){
+    if(!opened || reduce || e.pointerType !== "mouse") return;
+    var now = performance.now(); if(now - lastTrail < 45) return; lastTrail = now;
+    bursts.push({x:e.clientX, y:e.clientY, vx:(Math.random()-.5)*.8, vy:-.5-Math.random()*.8, life:1,
+      d:.016+Math.random()*.01, r:4+Math.random()*5, kind:"trail",
+      c:trailCols[Math.floor(Math.random()*trailCols.length)], rot:(Math.random()-.5)*.6});
+  });
 
   /* tap sparkles */
   document.addEventListener("click", function(e){
