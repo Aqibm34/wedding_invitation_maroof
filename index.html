@@ -228,7 +228,24 @@
   .prize .p1{font-family:var(--caps);font-size:max(.55rem,5cqw);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi)}
   .prize .p2{font-family:var(--caps);font-size:max(.9rem,10cqw);line-height:1.1;color:var(--gold-hi);text-shadow:0 0 14px rgba(241,223,174,.6)}
   .prize .p3{font-family:var(--script);font-size:max(1rem,11cqw);line-height:1.1}
-  .scratch-item.big{width:min(360px,100%);margin-top:1.2rem}
+  .scratch-item.big{width:min(360px,100%);margin-block:.4rem 1.4rem}
+  .scratch-item.big .scratch{animation:float 4.5s ease-in-out infinite}
+  .scratch-item.big .scratch svg.prize-heart{animation:aura 3s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
+  @keyframes aura{0%,100%{filter:drop-shadow(0 14px 20px rgba(10,42,33,.35)) drop-shadow(0 0 6px rgba(241,223,174,.3))}
+    50%{filter:drop-shadow(0 14px 20px rgba(10,42,33,.35)) drop-shadow(0 0 26px rgba(241,223,174,.9))}}
+  .ripple{position:absolute;left:50%;top:50%;width:70%;aspect-ratio:1;border-radius:50%;border:2px solid var(--gold);
+    transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;animation:ripple 3s ease-out infinite}
+  .ripple.r2{animation-delay:1.5s}
+  @keyframes ripple{0%{transform:translate(-50%,-50%) scale(.6);opacity:.7}100%{transform:translate(-50%,-50%) scale(1.7);opacity:0}}
+  .scratch-item.big .scratch.revealed{animation:float 4.5s ease-in-out infinite}
+  .scratch-item.big .scratch.revealed .prize{animation:none}
+  .scratch-item.big .scratch.revealed .pn,.scratch-item.big .scratch.revealed .pamp,.scratch-item.big .scratch.revealed .p1{
+    animation:bloom 1.4s cubic-bezier(.2,.7,.2,1) backwards,shimmer 6s ease-in-out infinite,glow 3.2s ease-in-out infinite}
+  .scratch-item.big .scratch.revealed .p1{animation:bloom 1.4s cubic-bezier(.2,.7,.2,1) backwards}
+  .scratch-item.big .scratch.revealed .pamp{animation:bloom 1.4s cubic-bezier(.2,.7,.2,1) .25s backwards}
+  .scratch-item.big .scratch.revealed .pn:last-child{animation-delay:.5s,0s,0s}
+  @keyframes bloom{0%{opacity:0;letter-spacing:.5em;filter:blur(6px)}100%{opacity:1;letter-spacing:normal;filter:blur(0)}}
   .scratch-item.big .prize{top:16%;bottom:24%;gap:0}
   .prize .pn{font-family:var(--script);font-size:15cqw;line-height:1.05;padding-inline:.1em}
   .prize .pamp{font-family:var(--script);font-size:9cqw;line-height:1;color:var(--gold-hi)}
@@ -403,6 +420,15 @@
       <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#18573F"/><stop offset="1" stop-color="#0A2A21"/></linearGradient>
       <symbol id="bigheart" viewBox="0 0 280 256"><path d="M140 243.2 C14 158.7, -5.6 64, 70 25.6 C106.4 7.7, 134.4 30.7, 140 61.4 C145.6 30.7, 173.6 7.7, 210 25.6 C285.6 64, 266 158.7, 140 243.2 Z" fill="url(#hg)" stroke="#C2A05A" stroke-width="2"/></symbol></defs>
     </svg>
+    <div class="scratch-item big">
+      <p class="lbl">The couple</p>
+      <div class="scratch">
+        <span class="ripple" aria-hidden="true"></span><span class="ripple r2" aria-hidden="true"></span>
+        <svg class="prize-heart" viewBox="0 0 280 256" aria-hidden="true"><use href="#bigheart"/></svg>
+        <div class="prize" aria-live="polite"><p class="p1">Together forever</p><p class="pn foil">Maroof</p><p class="pamp">&amp;</p><p class="pn foil">Adeeba</p></div>
+        <canvas aria-label="Big golden heart to scratch: the couple's names"></canvas>
+      </div>
+    </div>
     <div class="scratches">
       <div class="scratch-item">
         <p class="lbl">The date</p>
@@ -419,14 +445,6 @@
           <div class="prize" aria-live="polite"><p class="p1">Walima · Sun 29 Nov</p><p class="p2">7:00 PM</p><p class="p3">Classic Resort</p></div>
           <canvas aria-label="Golden heart to scratch: Walima timing"></canvas>
         </div>
-      </div>
-    </div>
-    <div class="scratch-item big">
-      <p class="lbl">The couple</p>
-      <div class="scratch">
-        <svg class="prize-heart" viewBox="0 0 280 256" aria-hidden="true"><use href="#bigheart"/></svg>
-        <div class="prize" aria-live="polite"><p class="p1">Together forever</p><p class="pn foil">Maroof</p><p class="pamp">&amp;</p><p class="pn foil">Adeeba</p></div>
-        <canvas aria-label="Big golden heart to scratch: the couple's names"></canvas>
       </div>
     </div>
     <button class="btn" id="scratchAgain" type="button" hidden>Scratch again</button>
@@ -692,8 +710,15 @@
       if(st.revealed) return; st.revealed = true;
       sc.classList.add("done"); wrap.classList.add("revealed");
       var r = wrap.getBoundingClientRect();
-      burst(r.left + r.width/2, r.top + r.height*0.45, "heart", 50);
-      burst(r.left + r.width/2, r.top + r.height*0.45, "spark", 30);
+      if(wrap.closest(".big")){
+        for(var i=0;i<10;i++) (function(i){
+          setTimeout(function(){ burst(W*(i+.5)/10, -10, "heart", 6); }, i*90);
+        })(i);
+        burst(r.left + r.width/2, r.top + r.height*0.45, "spark", 50);
+      } else {
+        burst(r.left + r.width/2, r.top + r.height*0.45, "heart", 50);
+        burst(r.left + r.width/2, r.top + r.height*0.45, "spark", 30);
+      }
       againBtn.hidden = false;
       if(cards.every(function(c){ return c.isRevealed(); })){
         setTimeout(function(){ burst(W/2, H*0.35, "heart", 90); }, 500);
