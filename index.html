@@ -1,0 +1,456 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Adeeba &amp; Maroof</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Pinyon+Script&display=swap">
+<style>
+  /* Layout concept: a Mughal garden. Emerald garden gates swing open onto blush-ivory paper laced
+     with a faint jaali lattice; every frame is an arch, every rule is gold leaf.
+     Deliberately single-theme, like a printed card. */
+  :root{
+    --emerald:#0F3B2E;     /* gates, arches, bands */
+    --emerald-2:#0A2A21;   /* deep shade */
+    --gold:#C2A05A;        /* gold leaf */
+    --gold-hi:#EAD6A4;     /* foil highlight */
+    --ivory:#F8F1EA;       /* blush-ivory paper */
+    --ink:#2B2620;         /* body text */
+    --muted:#7A6B57;       /* secondary text */
+    --rose:#C98F86;        /* small blush accents */
+    --line:rgba(194,160,90,.45);
+    --foil:linear-gradient(100deg,#9C7A3C 0%,#E9D39E 28%,#B8924C 50%,#F3E3B8 70%,#A88440 100%);
+    --script:'Pinyon Script','Snell Roundhand',cursive;
+    --caps:'Cinzel','Trajan Pro',Georgia,serif;
+    --body:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --arabic:'Amiri','Traditional Arabic',serif;
+    --jaali:radial-gradient(circle at 50% 50%,transparent 8px,rgba(194,160,90,.13) 8.6px,rgba(194,160,90,.13) 9.4px,transparent 10px);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.65;
+    background:var(--jaali) 0 0/26px 26px,var(--jaali) 13px 13px/26px 26px,var(--ivory);
+    -webkit-font-smoothing:antialiased}
+  body.locked{overflow:hidden}
+  h1,h2,h3,p{margin:0}
+  h1,h2,h3{font-weight:400;text-wrap:balance;line-height:1.15}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+  .foil{background:var(--foil);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;
+    color:transparent;animation:shimmer 7s ease-in-out infinite}
+  @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .orn{display:block;color:var(--gold);width:min(240px,64%);height:auto;margin-inline:auto}
+
+  /* ---------- gold dust ---------- */
+  #dust{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+  /* ---------- garden gates ---------- */
+  #gate{position:fixed;inset:0;z-index:60;perspective:1800px;cursor:pointer;overflow:hidden}
+  .door{position:absolute;top:0;bottom:0;width:50.5%;
+    background:var(--jaali) 0 0/30px 30px,var(--jaali) 15px 15px/30px 30px,
+      radial-gradient(120% 80% at 50% 40%,#16503F,var(--emerald) 55%,var(--emerald-2));
+    transition:transform 1.7s cubic-bezier(.65,0,.25,1),opacity .6s ease 1.25s;backface-visibility:hidden}
+  .door.l{left:0;transform-origin:left center;box-shadow:inset -1px 0 0 var(--gold),inset -10px 0 24px rgba(0,0,0,.35)}
+  .door.r{right:0;transform-origin:right center;box-shadow:inset 1px 0 0 var(--gold),inset 10px 0 24px rgba(0,0,0,.35)}
+  .door .arch{position:absolute;top:6%;bottom:5%;left:13%;right:13%;border:1px solid var(--gold);
+    border-radius:999px 999px 6px 6px}
+  .door .arch::after{content:"";position:absolute;inset:9px;border:1px solid rgba(194,160,90,.45);border-radius:inherit}
+  .door .knob{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-hi),#8E6E32);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+  .door.l .knob{right:9%}
+  .door.r .knob{left:9%}
+  .gate-text{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:1.1rem;text-align:center;
+    padding:max(24px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px))
+            max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    transition:opacity .5s ease}
+  .gate-text .bism{font-family:var(--arabic);font-size:clamp(1.3rem,5vw,1.7rem);color:var(--gold-hi);direction:rtl}
+  .gate-text .gn{font-family:var(--script);font-size:clamp(3rem,13vw,4.6rem);line-height:1.05;padding-inline:.15em}
+  .gate-text .gs{font-style:italic;font-size:1.15rem;color:rgba(248,241,234,.8)}
+  .seal{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;
+    background:radial-gradient(circle at 35% 28%,#F3E3B8,#C2A05A 45%,#8C6A2E);
+    box-shadow:0 0 0 5px rgba(194,160,90,.25),0 10px 24px rgba(0,0,0,.45);
+    font-family:var(--script);font-size:1.9rem;color:var(--emerald);animation:pulse 2.6s ease-in-out infinite}
+  .seal::before{content:"";position:absolute;inset:7px;border-radius:50%;border:1px dashed rgba(15,59,46,.45)}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .gate-text .hint{font-family:var(--caps);font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+  #gate.open .door.l{transform:rotateY(-108deg);opacity:0}
+  #gate.open .door.r{transform:rotateY(108deg);opacity:0}
+  #gate.open .gate-text{opacity:0}
+  #gate.open{pointer-events:none}
+
+  /* ---------- page ---------- */
+  main{position:relative;z-index:1;max-width:62rem;margin-inline:auto;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:clamp(1.5rem,5vw,3rem) 0;display:flex;flex-direction:column}
+  section{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem}
+  .narrow{max-width:34rem;margin-inline:auto}
+  .kicker{font-family:var(--caps);font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--rose)}
+  h2{font-family:var(--caps);font-size:clamp(1.6rem,5.5vw,2.3rem);letter-spacing:.06em;color:var(--emerald)}
+  .lede{font-size:1.15rem;max-width:34rem}
+  .muted{color:var(--muted)}
+  .divider{padding-block:clamp(2.4rem,8vw,3.6rem)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  body.is-open .anim{animation:rise 1s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:var(--d,0s)}
+  .reveal.in{animation:rise .9s cubic-bezier(.2,.7,.2,1) backwards}
+
+  /* ---------- cover arch ---------- */
+  .cover{position:relative;width:min(100%,34rem);margin-inline:auto;color:var(--ivory);
+    background:var(--jaali) 0 0/28px 28px,var(--jaali) 14px 14px/28px 28px,
+      radial-gradient(110% 70% at 50% 25%,#17523F,var(--emerald) 55%,var(--emerald-2));
+    border-radius:999px 999px 10px 10px;padding:clamp(4.5rem,16vw,6.5rem) clamp(1.4rem,6vw,2.6rem) clamp(2.4rem,7vw,3.2rem);
+    box-shadow:0 40px 70px -40px rgba(10,42,33,.7);gap:1.15rem}
+  .cover::before,.cover::after{content:"";position:absolute;border-radius:inherit;pointer-events:none}
+  .cover::before{inset:10px;border:1px solid var(--gold)}
+  .cover::after{inset:17px;border:1px solid rgba(194,160,90,.4)}
+  .cover .bism{font-family:var(--arabic);font-size:clamp(1.3rem,5vw,1.65rem);color:var(--gold-hi);direction:rtl}
+  .cover .small{font-family:var(--caps);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(248,241,234,.75)}
+  .cover .names{font-family:var(--script);font-size:clamp(3.4rem,15vw,5.4rem);line-height:1.02;padding-inline:.12em}
+  .cover .names .amp{display:block;font-size:.5em;margin-block:.05em}
+  .cover .invite{font-style:italic;font-size:1.12rem;color:rgba(248,241,234,.85);max-width:24rem}
+  .datebar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;width:100%;max-width:21rem;
+    font-family:var(--caps);color:var(--gold-hi)}
+  .datebar span{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;border-block:1px solid var(--line);padding-block:.45rem}
+  .datebar b{font-weight:400;font-size:2.8rem;line-height:1}
+  .cover .venue-line{font-family:var(--caps);font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+  .ayah{display:flex;flex-direction:column;gap:.25rem;margin-top:.6rem}
+  .ayah .ar{font-family:var(--arabic);font-size:1.25rem;color:var(--gold-hi);direction:rtl}
+  .ayah .en{font-style:italic;font-size:1rem;color:rgba(248,241,234,.8)}
+  .ayah cite{font-style:normal;font-family:var(--caps);font-size:.62rem;letter-spacing:.24em;color:var(--gold)}
+
+  /* ---------- event arches ---------- */
+  .events{display:grid;grid-template-columns:repeat(auto-fit,minmax(16.5rem,1fr));gap:1.4rem;width:100%;margin-top:1rem}
+  .event{position:relative;background:rgba(255,252,247,.82);border-radius:999px 999px 8px 8px;
+    padding:3.6rem 1.4rem 2rem;display:flex;flex-direction:column;align-items:center;gap:.55rem;
+    box-shadow:0 24px 50px -36px rgba(10,42,33,.55);transition:transform .35s ease,box-shadow .35s ease}
+  .event::before{content:"";position:absolute;inset:8px;border:1px solid var(--line);border-radius:inherit;pointer-events:none}
+  .event:hover{transform:translateY(-4px);box-shadow:0 30px 60px -34px rgba(10,42,33,.6)}
+  .event .ico{width:58px;height:58px;border-radius:50%;background:var(--emerald);color:var(--gold-hi);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(194,160,90,.3)}
+  .event .ico svg{width:30px;height:30px}
+  .event h3{font-family:var(--script);font-size:2.3rem;color:var(--emerald);line-height:1.1;margin-top:.3rem}
+  .event .sub{font-style:italic;color:var(--muted)}
+  .event dl{margin:.4rem 0 0;display:flex;flex-direction:column;gap:.15rem;width:100%}
+  .event dl div{display:flex;justify-content:center;gap:.5rem;align-items:baseline}
+  .event dt{font-family:var(--caps);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose)}
+  .event dd{margin:0;color:var(--ink);font-size:1.08rem}
+  .btn{display:inline-flex;align-items:center;gap:.55em;margin-top:.7rem;text-decoration:none;cursor:pointer;
+    font-family:var(--caps);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--emerald);border:1px solid var(--gold);border-radius:999px;padding:.65rem 1.25rem;background:transparent;
+    transition:background .25s,color .25s}
+  .btn:hover{background:var(--emerald);color:var(--gold-hi);border-color:var(--emerald)}
+  .btn svg{width:14px;height:14px}
+
+  /* ---------- timeline ---------- */
+  .timeline{list-style:none;margin:.6rem 0 0;padding:0;width:100%;max-width:27rem;text-align:left;position:relative}
+  .timeline::before{content:"";position:absolute;left:6.15rem;top:1rem;bottom:1rem;width:1px;
+    background:linear-gradient(var(--gold),var(--line),var(--gold))}
+  .timeline li{display:grid;grid-template-columns:5rem 2.3rem 1fr;align-items:center;padding-block:.75rem}
+  .timeline time{font-family:var(--caps);font-size:.95rem;color:var(--emerald);text-align:right;font-variant-numeric:tabular-nums}
+  .timeline .gem{width:12px;height:12px;justify-self:center;transform:rotate(45deg);background:var(--ivory);
+    border:1px solid var(--gold);position:relative;z-index:1;margin-left:.3rem}
+  .timeline li.key .gem{background:var(--gold);box-shadow:0 0 0 4px rgba(194,160,90,.2)}
+  .timeline span{min-width:0;font-size:1.15rem;line-height:1.3}
+  .timeline small{display:block;font-size:.95rem;font-style:italic;color:var(--muted)}
+
+  /* ---------- dress code ---------- */
+  .swatches{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:.4rem}
+  .swatches figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:.35rem}
+  .swatches i{display:block;width:40px;height:58px;border-radius:999px 999px 4px 4px;border:1px solid var(--line);
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,.5)}
+  .swatches figcaption{font-family:var(--caps);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---------- venue band ---------- */
+  .venue{width:100%;max-width:40rem;position:relative;border:1px solid var(--line);padding:2.2rem 1.4rem;
+    background:rgba(255,252,247,.7);display:flex;flex-direction:column;align-items:center;gap:.7rem}
+  .venue::before,.venue::after{content:"❖";position:absolute;left:50%;transform:translate(-50%,-50%);
+    color:var(--gold);background:var(--ivory);padding-inline:.6rem;font-size:.9rem;line-height:1}
+  .venue::before{top:0}
+  .venue::after{top:100%}
+  .venue .addr{font-family:var(--script);font-size:2.4rem;color:var(--emerald);line-height:1.1}
+
+  /* ---------- countdown band ---------- */
+  .band{position:relative;margin-top:clamp(2.4rem,8vw,3.6rem);color:var(--ivory);
+    margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+    background:var(--jaali) 0 0/28px 28px,var(--jaali) 14px 14px/28px 28px,
+      radial-gradient(90% 120% at 50% 0%,#17523F,var(--emerald) 60%,var(--emerald-2));
+    border-radius:999px 999px 0 0 / 70px 70px 0 0;
+    padding:clamp(3.6rem,10vw,4.6rem) max(16px,env(safe-area-inset-right,0px)) 2.6rem max(16px,env(safe-area-inset-left,0px))}
+  .band .kicker{color:var(--gold)}
+  .band h2{color:var(--ivory)}
+  .countdown{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem}
+  .cd{width:4.9rem;padding:1.3rem .4rem .8rem;border:1px solid var(--gold);border-radius:999px 999px 6px 6px;
+    display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(10,42,33,.35)}
+  .cd b{font-family:var(--caps);font-weight:400;font-size:1.8rem;line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+  .cd span{font-family:var(--caps);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(248,241,234,.7)}
+  .cd-done{font-family:var(--script);font-size:2.6rem}
+  .band footer{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-top:3rem;
+    padding-top:2rem;border-top:1px solid rgba(194,160,90,.3)}
+  .band footer .fn{font-family:var(--script);font-size:2.6rem;line-height:1.1;padding-inline:.12em}
+  .band footer .fd{font-family:var(--caps);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+  .band footer .dua{font-style:italic;color:rgba(248,241,234,.7);font-size:1rem}
+
+  @media (max-width:420px){
+    .timeline::before{left:5.15rem}
+    .timeline li{grid-template-columns:4rem 2.3rem 1fr}
+    .cd{width:4.3rem}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms!important;animation:none!important}
+  }
+</style>
+
+<!-- shared ornament -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="orn" viewBox="0 0 240 30">
+    <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+      <path d="M8 15 H86"/><path d="M154 15 H232"/>
+      <path d="M86 15 C 94 15 96 7 102 9 C 106 10 104 15 100 14"/>
+      <path d="M154 15 C 146 15 144 7 138 9 C 134 10 136 15 140 14"/>
+      <path d="M86 15 C 94 15 96 23 102 21 C 106 20 104 15 100 16"/>
+      <path d="M154 15 C 146 15 144 23 138 21 C 134 20 136 15 140 16"/>
+      <path d="M120 3 L130 15 L120 27 L110 15 Z"/>
+      <path d="M120 8 L125 15 L120 22 L115 15 Z"/>
+    </g>
+    <g fill="currentColor"><circle cx="120" cy="15" r="1.6"/><circle cx="108" cy="15" r="1.2"/><circle cx="132" cy="15" r="1.2"/>
+      <circle cx="8" cy="15" r="1.4"/><circle cx="232" cy="15" r="1.4"/></g>
+  </symbol>
+  <symbol id="pin" viewBox="0 0 24 24"><path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-14 0c0 4 3 7 7 10Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="11" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+</svg>
+
+<canvas id="dust" aria-hidden="true"></canvas>
+
+<!-- ============ GARDEN GATES ============ -->
+<div id="gate" role="button" tabindex="0" aria-label="Open the gates to the wedding invitation">
+  <div class="door l"><div class="arch"></div><span class="knob"></span></div>
+  <div class="door r"><div class="arch"></div><span class="knob"></span></div>
+  <div class="gate-text">
+    <p class="bism" lang="ar">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+    <p class="gn foil">Adeeba &amp; Maroof</p>
+    <p class="gs">We have an announcement…</p>
+    <div class="seal" aria-hidden="true">AM</div>
+    <p class="hint">Tap to open the gates</p>
+  </div>
+</div>
+
+<main id="invite">
+
+  <!-- cover -->
+  <section class="cover">
+    <p class="bism anim" style="--d:.1s" lang="ar">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+    <p class="small anim" style="--d:.2s">Together with their families</p>
+    <h1 class="names foil anim" style="--d:.3s" tabindex="-1">Adeeba<span class="amp">&amp;</span>Maroof</h1>
+    <p class="invite anim" style="--d:.42s">request the pleasure of your company as they begin their life together</p>
+    <div class="datebar anim" style="--d:.52s"><span>Saturday</span><b>28</b><span>Nov 2026</span></div>
+    <p class="venue-line anim" style="--d:.6s">The Classic Garden</p>
+    <div class="ayah anim" style="--d:.7s">
+      <p class="ar" lang="ar">وَخَلَقْنَاكُمْ أَزْوَاجًا</p>
+      <p class="en">“And We created you in pairs.”</p>
+      <cite>Surah An-Naba · 78:8</cite>
+    </div>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <section class="narrow reveal">
+    <p class="kicker">With joyful hearts</p>
+    <h2>Come celebrate with us</h2>
+    <p class="lede">Among roses in late bloom and the warmth of family, we invite you to share in our happiness at the Classic Garden. Your presence and your duas will make the day complete.</p>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <!-- events -->
+  <section>
+    <p class="kicker reveal">The celebrations</p>
+    <h2 class="reveal">Three gatherings</h2>
+    <div class="events">
+      <article class="event reveal">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M24 42c-7-5-12-11-12-18a12 12 0 0 1 24 0c0 7-5 13-12 18Z"/><path d="M24 17c-2.5 3-2.5 7 0 10 2.5-3 2.5-7 0-10Z"/><circle cx="17.5" cy="25" r="1.3"/><circle cx="30.5" cy="25" r="1.3"/></svg></span>
+        <h3>Mehndi Night</h3>
+        <p class="sub">An evening of henna, music &amp; colour</p>
+        <dl><div><dt>When</dt><dd>Thursday, 26 November</dd></div><div><dt>Time</dt><dd>7:00 PM onward</dd></div><div><dt>Where</dt><dd>The Courtyard</dd></div></dl>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=The+Classic+Garden" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>View on Maps</a>
+      </article>
+      <article class="event reveal">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="28" r="9"/><circle cx="29" cy="28" r="9"/><path d="M21 13l3-4 3 4-3 3z"/></svg></span>
+        <h3>Nikah</h3>
+        <p class="sub">The exchange of vows &amp; blessings</p>
+        <dl><div><dt>When</dt><dd>Saturday, 28 November</dd></div><div><dt>Time</dt><dd>4:00 PM</dd></div><div><dt>Where</dt><dd>The Rose Pavilion</dd></div></dl>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=The+Classic+Garden" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>View on Maps</a>
+      </article>
+      <article class="event reveal">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8h8l-1 9a3 3 0 0 1-6 0zM26 8h8l-1 9a3 3 0 0 1-6 0z"/><path d="M18 20v16M30 20v16M14 38h8M26 38h8"/></svg></span>
+        <h3>Walima</h3>
+        <p class="sub">Dinner &amp; celebration under the stars</p>
+        <dl><div><dt>When</dt><dd>Saturday, 28 November</dd></div><div><dt>Time</dt><dd>7:30 PM</dd></div><div><dt>Where</dt><dd>The Grand Lawn</dd></div></dl>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=The+Classic+Garden" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>View on Maps</a>
+      </article>
+    </div>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <!-- itinerary -->
+  <section class="reveal">
+    <p class="kicker">Saturday, 28 November</p>
+    <h2>The wedding day</h2>
+    <ol class="timeline">
+      <li><time>3:30 PM</time><i class="gem"></i><span>Garden gates open<small>Welcome among the roses</small></span></li>
+      <li class="key"><time>4:00 PM</time><i class="gem"></i><span>Nikah<small>The Rose Pavilion</small></span></li>
+      <li><time>7:00 PM</time><i class="gem"></i><span>Lawn opens<small>Guests gather for the evening</small></span></li>
+      <li class="key"><time>7:30 PM</time><i class="gem"></i><span>Walima reception<small>Dinner on the Grand Lawn</small></span></li>
+    </ol>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <!-- dress code -->
+  <section class="narrow reveal">
+    <p class="kicker">What to wear</p>
+    <h2>Garden formal</h2>
+    <p class="lede">Soft florals, pastels and flowing fabrics for an afternoon that drifts into evening outdoors. Block heels are kind to the lawn.</p>
+    <div class="swatches">
+      <figure><i style="background:#E8C3BA"></i><figcaption>Blush</figcaption></figure>
+      <figure><i style="background:#B7C7AE"></i><figcaption>Sage</figcaption></figure>
+      <figure><i style="background:#C2D2DF"></i><figcaption>Powder</figcaption></figure>
+      <figure><i style="background:#D2C4DD"></i><figcaption>Lilac</figcaption></figure>
+      <figure><i style="background:#E9DBB4"></i><figcaption>Champagne</figcaption></figure>
+    </div>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <!-- venue -->
+  <section class="reveal">
+    <p class="kicker">Getting there</p>
+    <h2>The venue</h2>
+    <div class="venue">
+      <p class="addr">The Classic Garden</p>
+      <p>Rose Avenue, Garden District</p>
+      <p class="muted">Parking and valet at the east gate. The pavilions are a short walk through the rose beds.</p>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=The+Classic+Garden" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>Get directions</a>
+    </div>
+  </section>
+
+  <div class="divider"><svg class="orn"><use href="#orn"/></svg></div>
+
+  <!-- gifts -->
+  <section class="narrow reveal">
+    <p class="kicker">Gifts</p>
+    <h2>Your presence is our gift</h2>
+    <p class="lede">Having you with us is all we wish for. If you would like to give something more, keep us in your duas as we begin our new life together.</p>
+  </section>
+
+  <!-- countdown + footer -->
+  <div class="band">
+    <section>
+      <p class="kicker">See you in</p>
+      <h2>Counting the days</h2>
+      <div class="countdown" id="countdown" aria-label="Countdown to the Nikah">
+        <div class="cd"><b id="cd-d">00</b><span>Days</span></div>
+        <div class="cd"><b id="cd-h">00</b><span>Hours</span></div>
+        <div class="cd"><b id="cd-m">00</b><span>Minutes</span></div>
+        <div class="cd"><b id="cd-s">00</b><span>Seconds</span></div>
+      </div>
+    </section>
+    <footer>
+      <p class="fn foil">Adeeba &amp; Maroof</p>
+      <p class="fd">28 · 11 · 2026 · The Classic Garden</p>
+      <p class="dua">May Allah bless this union</p>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- gates ---------- */
+  var gate = document.getElementById("gate");
+  var opened = false;
+  document.body.classList.add("locked");
+  function openGate(){
+    if(opened) return; opened = true;
+    gate.classList.add("open");
+    document.body.classList.remove("locked");
+    setTimeout(function(){
+      document.body.classList.add("is-open");
+      try{ document.querySelector(".cover .names").focus({preventScroll:true}); }catch(e){}
+    }, reduce ? 0 : 650);
+    setTimeout(function(){ gate.hidden = true; }, reduce ? 200 : 2000);
+  }
+  gate.addEventListener("click", openGate);
+  gate.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openGate(); }
+  });
+  var y0 = null;
+  gate.addEventListener("touchstart", function(e){ y0 = e.touches[0].clientY; }, {passive:true});
+  gate.addEventListener("touchmove", function(e){
+    if(y0 !== null && Math.abs(y0 - e.touches[0].clientY) > 40){ y0 = null; openGate(); }
+  }, {passive:true});
+  gate.addEventListener("wheel", function(e){ if(Math.abs(e.deltaY) > 20) openGate(); }, {passive:true});
+
+  /* ---------- scroll reveal (content stays visible without it) ---------- */
+  if("IntersectionObserver" in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting && opened){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".reveal").forEach(function(n){ io.observe(n); });
+  }
+
+  /* ---------- countdown ---------- */
+  var target = new Date(2026, 10, 28, 16, 0, 0).getTime(); // Nikah: 28 Nov 2026, 4:00 PM
+  var el = {d:"cd-d",h:"cd-h",m:"cd-m",s:"cd-s"};
+  for(var k in el) el[k] = document.getElementById(el[k]);
+  function pad(n){ return (n<10?"0":"")+n; }
+  function tick(){
+    var diff = target - Date.now();
+    if(diff <= 0){
+      document.getElementById("countdown").innerHTML = '<p class="cd-done foil">Today is the day</p>';
+      clearInterval(timer); return;
+    }
+    var s = Math.floor(diff/1000);
+    el.d.textContent = pad(Math.floor(s/86400));
+    el.h.textContent = pad(Math.floor(s%86400/3600));
+    el.m.textContent = pad(Math.floor(s%3600/60));
+    el.s.textContent = pad(s%60);
+  }
+  var timer = setInterval(tick, 1000); tick();
+
+  /* ---------- gold dust ---------- */
+  if(reduce) return;
+  var cv = document.getElementById("dust"), ctx = cv.getContext("2d");
+  var W, H, motes = [];
+  function size(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function mote(y){
+    return {x:Math.random()*W, y:y == null ? Math.random()*H : y, r:.6+Math.random()*1.8,
+      v:.12+Math.random()*.3, ph:Math.random()*6.28, tw:.01+Math.random()*.03};
+  }
+  size();
+  for(var i=0;i<38;i++) motes.push(mote());
+  window.addEventListener("resize", size);
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<motes.length;i++){
+      var m = motes[i];
+      m.y -= m.v; m.ph += m.tw; m.x += Math.sin(m.ph)*.25;
+      if(m.y < -5){ motes[i] = mote(H+5); continue; }
+      var a = .25 + .35*(.5+.5*Math.sin(m.ph*2));
+      ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,6.283);
+      ctx.fillStyle = "rgba(201,164,92," + a.toFixed(3) + ")";
+      ctx.shadowColor = "rgba(234,214,164,.8)"; ctx.shadowBlur = 6;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+</script>
+</body></html>
