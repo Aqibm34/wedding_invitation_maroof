@@ -304,17 +304,6 @@
   .band footer .fd{font-family:var(--caps);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-hi)}
   .band footer .dua{font-style:italic;color:#FFF3DC;font-size:1.05rem}
 
-  /* ================= MUSIC ================= */
-  #mute{position:fixed;z-index:70;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));
-    width:48px;height:48px;border-radius:50%;padding:0;display:none;align-items:center;justify-content:center;cursor:pointer;
-    color:var(--gold-hi);background:rgba(10,42,33,.85);border:1px solid var(--gold);
-    box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 4px rgba(194,160,90,.15);-webkit-tap-highlight-color:transparent}
-  body.is-open #mute{display:flex}
-  #mute svg{width:22px;height:22px}
-  #mute .off,#mute.muted .on{display:none}
-  #mute.muted .off{display:block}
-  #mute:not(.muted){box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 4px rgba(194,160,90,.25),0 0 14px rgba(241,223,174,.45)}
-
   @media (max-width:420px){
     .cd{width:4.3rem}
     .book{height:35rem}
@@ -525,10 +514,6 @@
 </main>
 
 <audio id="song" src="nasheed.mp3" loop preload="auto"></audio>
-<button id="mute" type="button" aria-label="Mute music" aria-pressed="false">
-  <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-  <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-</button>
 
 <script>
 (function(){
@@ -635,40 +620,20 @@
 
   /* ================= music ================= */
   var song = document.getElementById("song");
-  var muteBtn = document.getElementById("mute");
-  var muted = false, fadeT = null;
-  /* fixed step count: iOS ignores volume changes, so never wait on song.volume reaching the target */
-  function fadeTo(target){
-    clearInterval(fadeT);
-    var from = song.volume, step = 0, steps = 16;
-    fadeT = setInterval(function(){
-      step++;
-      try { song.volume = from + (target - from) * step / steps; } catch(e){}
-      if(step >= steps){
-        clearInterval(fadeT);
-        if(target === 0) song.pause();
-      }
-    }, 60);
-  }
+  /* fade in over a fixed step count: iOS ignores volume changes, so never wait on song.volume */
   function playSong(){
-    if(muted) return;
+    var step = 0, steps = 16;
     song.volume = 0;
     var p = song.play();
-    if(p && p.catch) p.catch(function(){ setMuted(true); });
-    fadeTo(.8);
+    if(p && p.catch) p.catch(function(){});
+    var t = setInterval(function(){
+      step++;
+      try { song.volume = .8 * step / steps; } catch(e){}
+      if(step >= steps) clearInterval(t);
+    }, 60);
   }
-  function setMuted(m){
-    muted = m;
-    muteBtn.classList.toggle("muted", m);
-    muteBtn.setAttribute("aria-pressed", String(m));
-    muteBtn.setAttribute("aria-label", m ? "Play music" : "Mute music");
-  }
-  muteBtn.addEventListener("click", function(){
-    setMuted(!muted);
-    if(muted) fadeTo(0); else playSong();
-  });
   document.addEventListener("visibilitychange", function(){
-    if(!opened || muted) return;
+    if(!opened) return;
     if(document.hidden) song.pause(); else song.play().catch(function(){});
   });
 
