@@ -192,6 +192,26 @@
   .dots button{width:10px;height:10px;padding:0;border-radius:50%;border:1px solid var(--gold);background:transparent;cursor:pointer;
     transition:background .3s,transform .3s}
   .dots button[aria-current="true"]{background:var(--gold);transform:scale(1.25)}
+  /* book swipe cue */
+  .book-cue{position:absolute;right:9%;bottom:13%;z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:.3rem;
+    opacity:0;transition:opacity .6s ease}
+  body.is-open .book-cue{opacity:1;transition-delay:1.2s}
+  .book.touched .book-cue{opacity:0;transition-delay:0s}
+  .book-cue .hand{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#FFF3CF,var(--gold-hi) 45%,#C2A05A);color:var(--emerald-2);
+    box-shadow:0 0 0 2px rgba(255,243,207,.85),0 0 22px rgba(241,223,174,.9);animation:swipe 2.2s ease-in-out infinite}
+  .book-cue .hand svg{width:26px;height:26px}
+  .book-cue .trail{position:absolute;top:21px;right:23px;height:4px;width:0;border-radius:4px;
+    background:linear-gradient(90deg,transparent,rgba(241,223,174,.9));animation:trail 2.2s ease-in-out infinite}
+  .book-cue b{font-family:var(--caps);font-size:.66rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-hi);
+    text-shadow:0 0 10px rgba(0,0,0,.55);padding-left:.28em}
+  @keyframes swipe{0%{transform:translateX(0) scale(1);opacity:0}12%{opacity:1}20%{transform:translateX(0) scale(.88)}
+    60%{transform:translateX(-90px) scale(.88);opacity:1}75%,100%{transform:translateX(-90px) scale(1);opacity:0}}
+  @keyframes trail{0%,20%{width:0;opacity:0}30%{opacity:1}60%{width:90px;opacity:.9}75%,100%{width:90px;opacity:0}}
+  .book-nav #bNext{animation:nudge 1.6s ease-in-out infinite}
+  .book-wrap.touched .book-nav #bNext{animation:none}
+  @keyframes nudge{0%,100%{transform:translateX(0);box-shadow:0 0 0 0 rgba(194,160,90,.6)}
+    50%{transform:translateX(4px);box-shadow:0 0 0 8px rgba(194,160,90,0)}}
   .book-hint{font-family:var(--caps);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 
   /* ---------- event cards ---------- */
@@ -313,6 +333,23 @@
     .cd{width:4.3rem}
     .book{height:35rem}
   }
+  /* ---------- scroll cue ---------- */
+  .scroll-cue{position:fixed;left:50%;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));z-index:50;
+    transform:translate(-50%,24px) scale(.8);opacity:0;pointer-events:none;border:0;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.75rem 1.5rem .6rem;border-radius:999px;
+    background:linear-gradient(135deg,#FFF3CF,var(--gold-hi) 40%,#C2A05A);color:var(--emerald-2);
+    box-shadow:0 0 0 2px rgba(255,243,207,.9),0 0 26px rgba(241,223,174,.85),0 14px 30px -10px rgba(10,42,33,.8);
+    transition:opacity .6s ease,transform .6s cubic-bezier(.2,1.6,.4,1)}
+  .scroll-cue::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--gold-hi);
+    animation:cue-ring 1.8s ease-out infinite;pointer-events:none}
+  .scroll-cue.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto;animation:cue-bob 1.8s ease-in-out .6s infinite}
+  .scroll-cue span{font-family:var(--caps);font-size:.8rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;padding-left:.3em;white-space:nowrap}
+  .scroll-cue svg{width:24px;height:24px;display:block;margin-top:-9px;animation:cue 1.2s ease-in-out infinite}
+  .scroll-cue svg:first-of-type{margin-top:0}
+  .scroll-cue svg:last-of-type{animation-delay:.15s}
+  @keyframes cue{0%,100%{transform:translateY(-3px);opacity:.3}50%{transform:translateY(5px);opacity:1}}
+  @keyframes cue-bob{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,-10px) scale(1.05)}}
+  @keyframes cue-ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35,1.6);opacity:0}}
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms!important;animation:none!important}
   }
@@ -364,6 +401,11 @@
   <!-- ================= BOOK ================= -->
   <section class="book-wrap">
     <div class="book" id="book" aria-roledescription="carousel" aria-label="Invitation pages">
+      <div class="book-cue" aria-hidden="true">
+        <span class="trail"></span>
+        <span class="hand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 10.5V9a1.5 1.5 0 0 1 3 0v2"/><path d="M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.6a6 6 0 0 1-4.8-2.4l-2.5-3.4a1.5 1.5 0 0 1 2.3-1.9L9 15"/></svg></span>
+        <b>Swipe</b>
+      </div>
       <article class="page" aria-label="Page 1 of 4">
         <p class="bism pa" lang="ar">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
         <p class="small pa">Together with their families</p>
@@ -418,7 +460,7 @@
         <p class="role">The Groom</p>
         <h3 class="glow-text">Maroof Ansari</h3>
         <p class="of">Son of</p>
-        <p class="parents">Gulfam<br>&amp;<br>Gulnaz</p>
+        <p class="parents">Gulfam Ansari<br>&amp;<br>Gulnaz Ansari</p>
       </article>
       <article class="event family reveal">
         <p class="role">The Bride</p>
@@ -540,6 +582,12 @@
   </div>
 </main>
 
+<button class="scroll-cue" id="scrollCue" type="button" aria-label="Scroll down for more">
+  <span>Scroll down</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+</button>
+
 <audio id="song" src="nasheed.mp3" loop preload="auto"></audio>
 
 <script>
@@ -633,7 +681,27 @@
       burst(W/2, H*0.4, "heart", 40);
     }, reduce ? 50 : 2100);
     setTimeout(function(){ gate.hidden = true; }, reduce ? 300 : 3400);
+    setTimeout(showCue, reduce ? 400 : 4200);
   }
+
+  /* ================= scroll cue ================= */
+  var cue = document.getElementById("scrollCue"), cueDone = false;
+  function hideCue(){
+    if(cueDone) return; cueDone = true;
+    cue.classList.remove("show");
+    window.removeEventListener("scroll", onCueScroll);
+    setTimeout(function(){ cue.hidden = true; }, 700);
+  }
+  function onCueScroll(){ if(window.scrollY > 60) hideCue(); }
+  function showCue(){
+    if(cueDone || window.scrollY > 60) return;
+    cue.classList.add("show");
+  }
+  window.addEventListener("scroll", onCueScroll, {passive:true});
+  cue.addEventListener("click", function(){
+    window.scrollBy({top:window.innerHeight*0.8, behavior:reduce ? "auto" : "smooth"});
+    hideCue();
+  });
   gate.addEventListener("click", openGate);
   gate.addEventListener("keydown", function(e){
     if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openGate(); }
@@ -711,6 +779,10 @@
   document.getElementById("bNext").addEventListener("click", function(){ go(idx + 1); restartAuto(); });
   document.getElementById("bPrev").addEventListener("click", function(){ go(idx - 1); restartAuto(); });
   var bx = null, swiped = false;
+  function touchedBook(){ book.classList.add("touched"); book.parentNode.classList.add("touched"); }
+  book.parentNode.addEventListener("pointerdown", function(e){
+    if(e.target.closest(".book, .book-nav")) touchedBook();
+  });
   book.addEventListener("touchstart", function(e){ bx = e.touches[0].clientX; swiped = false; }, {passive:true});
   book.addEventListener("touchend", function(e){
     if(bx === null) return;
