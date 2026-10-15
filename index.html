@@ -309,12 +309,11 @@
     width:48px;height:48px;border-radius:50%;padding:0;display:none;align-items:center;justify-content:center;cursor:pointer;
     color:var(--gold-hi);background:rgba(10,42,33,.85);border:1px solid var(--gold);
     box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 4px rgba(194,160,90,.15);-webkit-tap-highlight-color:transparent}
-  body.is-open #mute{display:flex;animation:pop .6s ease backwards}
+  body.is-open #mute{display:flex}
   #mute svg{width:22px;height:22px}
   #mute .off,#mute.muted .on{display:none}
   #mute.muted .off{display:block}
-  #mute:not(.muted)::before{content:"";position:absolute;left:50%;top:50%;width:100%;height:100%;border-radius:50%;
-    border:1px solid var(--gold);animation:ripple 2.4s ease-out infinite;pointer-events:none}
+  #mute:not(.muted){box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 4px rgba(194,160,90,.25),0 0 14px rgba(241,223,174,.45)}
 
   @media (max-width:420px){
     .cd{width:4.3rem}
