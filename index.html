@@ -43,6 +43,8 @@
   body{margin:0;color:var(--ink);font-family:var(--body);font-weight:500;font-size:19px;line-height:1.65;
     background:var(--jaali) 0 0/26px 26px,var(--jaali) 13px 13px/26px 26px,var(--ivory);
     -webkit-font-smoothing:antialiased}
+  html{overflow-x:hidden}
+  body{overflow-x:clip;max-width:100%}
   html:has(body.locked),body.locked{overflow:hidden;overscroll-behavior:none}
   h1,h2,h3,p{margin:0}
   h1,h2,h3{font-weight:400;text-wrap:balance;line-height:1.15}
@@ -215,7 +217,7 @@
   .book-hint{font-family:var(--caps);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 
   /* ---------- event cards ---------- */
-  .events{display:grid;grid-template-columns:repeat(auto-fit,minmax(16.5rem,1fr));gap:1.4rem;width:100%;max-width:44rem;margin-top:1rem}
+  .events{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(16.5rem,100%),1fr));gap:1.4rem;width:100%;max-width:44rem;margin-top:1rem}
   .event{position:relative;overflow:hidden;background:rgba(255,252,247,.9);border-radius:999px 999px 8px 8px;
     padding:3.6rem 1.4rem 2rem;display:flex;flex-direction:column;align-items:center;gap:.55rem;
     box-shadow:0 24px 50px -32px rgba(10,42,33,.6);transition:transform .35s ease,box-shadow .35s ease}
@@ -334,21 +336,21 @@
     .book{height:35rem}
   }
   /* ---------- scroll cue ---------- */
-  .scroll-cue{position:fixed;left:50%;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));z-index:50;
-    transform:translate(-50%,24px) scale(.8);opacity:0;pointer-events:none;border:0;cursor:pointer;
+  .scroll-cue{position:fixed;left:0;right:0;margin-inline:auto;width:max-content;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));z-index:50;
+    transform:translateY(24px) scale(.8);opacity:0;pointer-events:none;border:0;cursor:pointer;
     display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.75rem 1.5rem .6rem;border-radius:999px;
     background:linear-gradient(135deg,#FFF3CF,var(--gold-hi) 40%,#C2A05A);color:var(--emerald-2);
     box-shadow:0 0 0 2px rgba(255,243,207,.9),0 0 26px rgba(241,223,174,.85),0 14px 30px -10px rgba(10,42,33,.8);
     transition:opacity .6s ease,transform .6s cubic-bezier(.2,1.6,.4,1)}
   .scroll-cue::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--gold-hi);
     animation:cue-ring 1.8s ease-out infinite;pointer-events:none}
-  .scroll-cue.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto;animation:cue-bob 1.8s ease-in-out .6s infinite}
+  .scroll-cue.show{opacity:1;transform:none;pointer-events:auto;animation:cue-bob 1.8s ease-in-out .6s infinite}
   .scroll-cue span{font-family:var(--caps);font-size:.8rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;padding-left:.3em;white-space:nowrap}
   .scroll-cue svg{width:24px;height:24px;display:block;margin-top:-9px;animation:cue 1.2s ease-in-out infinite}
   .scroll-cue svg:first-of-type{margin-top:0}
   .scroll-cue svg:last-of-type{animation-delay:.15s}
   @keyframes cue{0%,100%{transform:translateY(-3px);opacity:.3}50%{transform:translateY(5px);opacity:1}}
-  @keyframes cue-bob{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,-10px) scale(1.05)}}
+  @keyframes cue-bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.05)}}
   @keyframes cue-ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35,1.6);opacity:0}}
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms!important;animation:none!important}
