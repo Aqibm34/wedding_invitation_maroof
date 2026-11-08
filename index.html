@@ -77,7 +77,9 @@
     background:radial-gradient(60% 50% at 50% 50%,#FFFBEA,#F6E2A8 35%,#D9B565 65%,#8A6A2E)}
   .seam{position:absolute;top:0;bottom:0;left:50%;width:6px;transform:translateX(-50%);z-index:3;
     background:linear-gradient(transparent 4%,#FFE7A8 20%,#FFF6D8 50%,#FFE7A8 80%,transparent 96%);filter:blur(2px);
-    animation:leak 2.4s ease-in-out infinite;transition:opacity .4s}
+    animation:leak 2.4s ease-in-out infinite;transition:opacity .4s;
+    -webkit-mask:linear-gradient(#000 calc(50% - 70px),transparent calc(50% - 58px),transparent calc(50% + 58px),#000 calc(50% + 70px));
+    mask:linear-gradient(#000 calc(50% - 70px),transparent calc(50% - 58px),transparent calc(50% + 58px),#000 calc(50% + 70px))}
   @keyframes leak{0%,100%{opacity:.55}50%{opacity:1}}
   .door{position:absolute;top:0;bottom:0;width:50%;z-index:2;transition:transform 2.3s cubic-bezier(.45,.05,.2,1);
     background:var(--jaali) 0 0/28px 28px,var(--jaali) 14px 14px/28px 28px,
@@ -92,25 +94,22 @@
   .door .arch{position:absolute;top:6%;bottom:5%;left:13%;right:13%;border:1px solid var(--gold);
     border-radius:999px 999px 6px 6px}
   .door .arch::after{content:"";position:absolute;inset:9px;border:1px solid rgba(194,160,90,.45);border-radius:inherit}
-  .knob{position:absolute;top:calc(50% + 62px);width:12px;height:12px;border-radius:50%;
+  .knob{position:absolute;top:calc(50% + 80px);width:12px;height:12px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,var(--gold-hi),#8E6E32);box-shadow:0 2px 4px rgba(0,0,0,.4)}
   .door.l .knob{right:7%}.door.r .knob{left:7%}
   #gate.knock .knob{animation:swing .5s ease-in-out 2}
   @keyframes swing{0%,100%{transform:translateY(0)}30%{transform:translateY(-2px)}70%{transform:translateY(1px)}}
   #gate.knock .door{animation:rattle .45s ease-in-out}
   @keyframes rattle{0%,100%{translate:0}25%{translate:1px}50%{translate:-1px}75%{translate:1px}}
-  .half{position:absolute;top:calc(50% - 42px);width:84px;height:84px;border-radius:50%;z-index:5;
-    background:radial-gradient(circle at 35% 28%,#FFF3CF,#D9B565 45%,#8C6A2E);
-    box-shadow:0 0 0 5px rgba(194,160,90,.25),0 8px 18px rgba(0,0,0,.45),inset 0 -4px 8px rgba(90,60,20,.35);
-    display:flex;align-items:center;justify-content:center;font-family:var(--script);font-size:2.2rem;color:var(--emerald);
-    text-shadow:0 1px 0 rgba(255,240,200,.6)}
-  .half::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px dashed rgba(15,59,46,.5)}
-  .door.l .half{right:-42px;clip-path:inset(-10px 50% -10px -10px)}
-  .door.r .half{left:-42px;clip-path:inset(-10px -10px -10px 50%)}
+  /* seal: an eight-pointed Mughal star around an emerald medallion; each door holds a full copy clipped to its half */
+  .half{position:absolute;top:calc(50% - 64px);width:128px;height:128px;z-index:5;overflow:visible;
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,.45)) drop-shadow(0 0 12px rgba(241,223,174,.25))}
+  .door.l .half{right:-64px;clip-path:inset(-20px 50% -20px -20px)}
+  .door.r .half{left:-64px;clip-path:inset(-20px -20px -20px 50%)}
   .gate-text{position:absolute;inset:0;z-index:6;text-align:center;pointer-events:none;transition:opacity .5s}
   .gt-top{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));
-    bottom:calc(50% + 62px);display:flex;flex-direction:column;align-items:center;gap:.6rem}
-  .gate-text .hint{position:absolute;left:50%;top:calc(50% + 96px);translate:-50% 0;white-space:nowrap}
+    bottom:calc(50% + 84px);display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .gate-text .hint{position:absolute;left:50%;top:calc(50% + 112px);translate:-50% 0;white-space:nowrap}
   .gate-text .bism{font-family:var(--arabic);font-size:clamp(1.25rem,5vw,1.6rem);color:var(--gold-hi);direction:rtl;
     text-shadow:0 2px 8px rgba(0,0,0,.9),0 0 16px rgba(241,223,174,.5)}
   .gate-text .gs{font-style:italic;font-size:1.2rem;color:#FFF3DC;text-shadow:0 2px 8px rgba(0,0,0,.95)}
@@ -326,6 +325,17 @@
   .band footer .fd{font-family:var(--caps);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-hi)}
   .band footer .dua{font-style:italic;color:#FFF3DC;font-size:1.05rem}
 
+  /* ================= MUSIC ================= */
+  /* pinned top-right and never animated: bottom-anchored fixed elements jump with the mobile address bar */
+  #mute{position:fixed;z-index:70;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));
+    width:42px;height:42px;border-radius:50%;padding:0;display:none;align-items:center;justify-content:center;cursor:pointer;
+    color:var(--gold-hi);background:rgba(10,42,33,.85);border:1px solid var(--gold);
+    box-shadow:0 3px 10px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}
+  body.is-open #mute{display:flex}
+  #mute svg{width:20px;height:20px}
+  #mute .off,#mute.muted .on{display:none}
+  #mute.muted .off{display:block}
+
   @media (max-width:420px){
     .cd{width:4.3rem}
     .book{height:35rem}
@@ -369,7 +379,45 @@
       <circle cx="8" cy="15" r="1.4"/><circle cx="232" cy="15" r="1.4"/></g>
   </symbol>
   <symbol id="pin" viewBox="0 0 24 24"><path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-14 0c0 4 3 7 7 10Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="11" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-  <symbol id="nav" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <defs>
+    <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF3CF"/><stop offset=".35" stop-color="#D9B565"/>
+      <stop offset=".65" stop-color="#A9843F"/><stop offset="1" stop-color="#E8CC86"/>
+    </linearGradient>
+    <linearGradient id="sealFoil" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#C9A45A"/><stop offset=".45" stop-color="#FFF3CF"/><stop offset="1" stop-color="#D4B06A"/>
+    </linearGradient>
+    <radialGradient id="sealGreen" cx=".4" cy=".35" r=".75">
+      <stop offset="0" stop-color="#1B6248"/><stop offset=".6" stop-color="#0F3B2E"/><stop offset="1" stop-color="#082219"/>
+    </radialGradient>
+  </defs>
+  <symbol id="seal" viewBox="0 0 128 128">
+    <g transform="translate(64 64)">
+      <!-- outer star: two squares, tips at r=60 -->
+      <g fill="url(#sealGold)" stroke="#8C6A2E" stroke-width="1">
+        <rect x="-42.4" y="-42.4" width="84.8" height="84.8"/>
+        <rect x="-42.4" y="-42.4" width="84.8" height="84.8" transform="rotate(45)"/>
+      </g>
+      <!-- inner engraved star -->
+      <g fill="none" stroke="#8C6A2E" stroke-width=".8" opacity=".7">
+        <rect x="-36" y="-36" width="72" height="72"/>
+        <rect x="-36" y="-36" width="72" height="72" transform="rotate(45)"/>
+      </g>
+      <!-- beads at the tips -->
+      <g fill="#FFF3CF" stroke="#8C6A2E" stroke-width=".6">
+        <circle cx="0" cy="-54" r="2.2"/><circle cx="0" cy="54" r="2.2"/><circle cx="-54" cy="0" r="2.2"/><circle cx="54" cy="0" r="2.2"/>
+        <circle cx="38.2" cy="-38.2" r="2.2"/><circle cx="-38.2" cy="-38.2" r="2.2"/><circle cx="38.2" cy="38.2" r="2.2"/><circle cx="-38.2" cy="38.2" r="2.2"/>
+      </g>
+      <!-- medallion -->
+      <circle r="35" fill="url(#sealGreen)" stroke="url(#sealGold)" stroke-width="3"/>
+      <circle r="30" fill="none" stroke="#C2A05A" stroke-width=".7" stroke-dasharray="1.2 2.2"/>
+      <!-- fonts set inline: page CSS does not reach into a <use> shadow tree -->
+      <g font-family="'Pinyon Script','Snell Roundhand',cursive" font-size="35" fill="url(#sealFoil)" text-anchor="middle">
+        <text x="-13" y="9">M</text><text x="15" y="9">A</text>
+      </g>
+      <text x="1" y="24" font-family="Cinzel,Georgia,serif" font-size="10" font-weight="600" fill="#E8CC86" text-anchor="middle">&amp;</text>
+    </g>
+  </symbol>
 </svg>
 
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -379,8 +427,8 @@
   <div class="stage">
     <div class="portal">
       <div class="seam"></div>
-      <div class="door l"><div class="arch"></div><span class="knob"></span><span class="half">MA</span></div>
-      <div class="door r"><div class="arch"></div><span class="knob"></span><span class="half">MA</span></div>
+      <div class="door l"><div class="arch"></div><span class="knob"></span><svg class="half" viewBox="0 0 128 128" aria-hidden="true"><use href="#seal"/></svg></div>
+      <div class="door r"><div class="arch"></div><span class="knob"></span><svg class="half" viewBox="0 0 128 128" aria-hidden="true"><use href="#seal"/></svg></div>
     </div>
     <div class="gate-text">
       <div class="gt-top">
@@ -485,7 +533,6 @@
         <h3 class="glow-text">Walima</h3>
         <p class="sub">Dinner &amp; celebration with family and friends</p>
         <dl><div><dt>Date</dt><dd>Sunday, 29 November 2026</dd></div><div><dt>Time</dt><dd>7:00 PM</dd></div><div><dt>Venue</dt><dd>The Classic Garden</dd></div></dl>
-        <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=29.9823347,77.4920591" target="_blank" rel="noopener"><svg><use href="#nav"/></svg>Directions</a>
       </article>
     </div>
   </section>
@@ -543,8 +590,7 @@
       <iframe class="map" title="Map showing The Classic Garden, Saharanpur" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
         src="https://maps.google.com/maps?q=29.9823347,77.4920591&amp;z=15&amp;output=embed"></iframe>
       <div class="actions">
-        <a class="btn solid" href="https://www.google.com/maps/dir/?api=1&amp;destination=29.9823347,77.4920591" target="_blank" rel="noopener"><svg><use href="#nav"/></svg>Get directions</a>
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=29.9823347,77.4920591" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>Open in Maps</a>
+        <a class="btn solid" href="https://www.google.com/maps/search/?api=1&amp;query=29.9823347,77.4920591" target="_blank" rel="noopener"><svg><use href="#pin"/></svg>Open in Maps</a>
       </div>
     </div>
   </section>
@@ -584,6 +630,10 @@
 </button>
 
 <audio id="song" src="nasheed.mp3" loop preload="auto"></audio>
+<button id="mute" type="button" aria-label="Mute music" aria-pressed="false">
+  <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
 
 <script>
 (function(){
@@ -722,8 +772,16 @@
       if(step >= steps) clearInterval(t);
     }, 60);
   }
+  var muteBtn = document.getElementById("mute"), muted = false;
+  muteBtn.addEventListener("click", function(){
+    muted = !muted;
+    muteBtn.classList.toggle("muted", muted);
+    muteBtn.setAttribute("aria-pressed", String(muted));
+    muteBtn.setAttribute("aria-label", muted ? "Play music" : "Mute music");
+    if(muted) song.pause(); else song.play().catch(function(){});
+  });
   document.addEventListener("visibilitychange", function(){
-    if(!opened) return;
+    if(!opened || muted) return;
     if(document.hidden) song.pause(); else song.play().catch(function(){});
   });
 
