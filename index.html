@@ -65,64 +65,133 @@
   .divider.in .orn{animation:draw 2.2s ease forwards}
   @keyframes draw{from{stroke-dashoffset:180}to{stroke-dashoffset:0}}
 
-  #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
+  #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:65}
 
   /* ================= GATES ================= */
   #gate{position:fixed;inset:0;z-index:60;cursor:pointer;overflow:hidden;background:var(--emerald-2);
     touch-action:none;overscroll-behavior:none}
-  .stage{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.6,0,.3,1),opacity 1s ease .15s}
+  .stage{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.6,0,.3,1),opacity 1s ease .15s;
+    animation:gateIn 1.6s cubic-bezier(.2,.7,.2,1) backwards}
+  @keyframes gateIn{from{opacity:0;transform:scale(1.06)}}
   #gate.through .stage{transform:scale(2.2);opacity:0}
   #gate.through{background:transparent;transition:background 1s}
   .portal{position:absolute;inset:0;overflow:hidden;perspective:1800px;
     background:radial-gradient(60% 50% at 50% 50%,#FFFBEA,#F6E2A8 35%,#D9B565 65%,#8A6A2E)}
+  /* soft vignette over the closed doors */
+  .portal::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity 1s;
+    background:radial-gradient(75% 65% at 50% 50%,transparent 55%,rgba(3,18,13,.55))}
+  /* light rays that bloom from behind the doors as they part */
+  .rays{position:absolute;left:50%;top:50%;width:160vmax;height:160vmax;margin:-80vmax 0 0 -80vmax;z-index:1;opacity:0;
+    background:repeating-conic-gradient(from 0deg,rgba(255,250,228,.6) 0deg 2.5deg,transparent 2.5deg 10deg);
+    -webkit-mask:radial-gradient(circle,#000 0,rgba(0,0,0,.45) 16%,transparent 42%);
+    mask:radial-gradient(circle,#000 0,rgba(0,0,0,.45) 16%,transparent 42%);
+    transition:opacity 1.4s ease .2s;animation:spin 70s linear infinite}
+  @keyframes spin{to{transform:rotate(1turn)}}
   .seam{position:absolute;top:0;bottom:0;left:50%;width:6px;transform:translateX(-50%);z-index:3;
     background:linear-gradient(transparent 4%,#FFE7A8 20%,#FFF6D8 50%,#FFE7A8 80%,transparent 96%);filter:blur(2px);
     animation:leak 2.4s ease-in-out infinite;transition:opacity .4s;
-    -webkit-mask:linear-gradient(#000 calc(50% - 70px),transparent calc(50% - 58px),transparent calc(50% + 58px),#000 calc(50% + 70px));
-    mask:linear-gradient(#000 calc(50% - 70px),transparent calc(50% - 58px),transparent calc(50% + 58px),#000 calc(50% + 70px))}
+    -webkit-mask:linear-gradient(#000 calc(50% - 86px),transparent calc(50% - 72px),transparent calc(50% + 72px),#000 calc(50% + 86px));
+    mask:linear-gradient(#000 calc(50% - 86px),transparent calc(50% - 72px),transparent calc(50% + 72px),#000 calc(50% + 86px))}
   @keyframes leak{0%,100%{opacity:.55}50%{opacity:1}}
-  .door{position:absolute;top:0;bottom:0;width:50%;z-index:2;transition:transform 2.3s cubic-bezier(.45,.05,.2,1);
+  .door{position:absolute;top:0;bottom:0;width:50%;z-index:2;transition:transform 2.4s cubic-bezier(.5,.02,.18,1);
     background:var(--jaali) 0 0/28px 28px,var(--jaali) 14px 14px/28px 28px,
       radial-gradient(140% 90% at 50% 35%,#18573F,var(--emerald) 55%,var(--emerald-2))}
   .door.l{left:0;transform-origin:left center}
   .door.r{right:0;transform-origin:right center}
-  .door.l{box-shadow:inset -1px 0 0 var(--gold),inset -14px 0 22px rgba(0,0,0,.35)}
-  .door.r{box-shadow:inset 1px 0 0 var(--gold),inset 14px 0 22px rgba(0,0,0,.35)}
+  .door.l{box-shadow:inset -1px 0 0 var(--gold),inset -2px 0 0 rgba(0,0,0,.4),inset -16px 0 24px rgba(0,0,0,.4)}
+  .door.r{box-shadow:inset 1px 0 0 var(--gold),inset 2px 0 0 rgba(0,0,0,.4),inset 16px 0 24px rgba(0,0,0,.4)}
+  /* frame with a column of brass studs down each stile */
+  .door::before{content:"";position:absolute;inset:12px 9px;pointer-events:none;border:1px solid rgba(194,160,90,.5);
+    --stud:radial-gradient(circle,#FFF3CF 0 1px,#C9A45A 1.7px,#5E4520 2.5px,transparent 3px);
+    background:var(--stud) left 0 top 8px/12px 30px repeat-y,var(--stud) right 0 top 8px/12px 30px repeat-y}
   .door::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity 2.2s;pointer-events:none}
   .door.l::after{background:linear-gradient(90deg,rgba(0,0,0,.1),rgba(0,0,0,.7))}
   .door.r::after{background:linear-gradient(270deg,rgba(0,0,0,.1),rgba(0,0,0,.7))}
-  .door .arch{position:absolute;top:6%;bottom:5%;left:13%;right:13%;border:1px solid var(--gold);
-    border-radius:999px 999px 6px 6px}
-  .door .arch::after{content:"";position:absolute;inset:9px;border:1px solid rgba(194,160,90,.45);border-radius:inherit}
-  .knob{position:absolute;top:calc(50% + 80px);width:12px;height:12px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%,var(--gold-hi),#8E6E32);box-shadow:0 2px 4px rgba(0,0,0,.4)}
-  .door.l .knob{right:7%}.door.r .knob{left:7%}
-  #gate.knock .knob{animation:swing .5s ease-in-out 2}
-  @keyframes swing{0%,100%{transform:translateY(0)}30%{transform:translateY(-2px)}70%{transform:translateY(1px)}}
+  .door .arch{position:absolute;top:max(6%,40px);bottom:5%;left:15%;right:15%;border:1.5px solid var(--gold);
+    border-radius:999px 999px 6px 6px;
+    background:radial-gradient(90% 50% at 50% 20%,rgba(36,120,88,.4),transparent 70%),linear-gradient(transparent 55%,rgba(0,0,0,.2));
+    box-shadow:0 0 0 4px rgba(10,42,33,.55),0 0 0 5px rgba(194,160,90,.3),inset 0 0 34px rgba(0,0,0,.35)}
+  .door .arch::before{content:"";position:absolute;inset:5px;border:1px dotted rgba(241,223,174,.5);border-radius:inherit}
+  .door .arch::after{content:"";position:absolute;inset:11px;border:1px solid rgba(194,160,90,.42);border-radius:inherit}
+  .finial{position:absolute;left:50%;top:-33px;width:50px;height:34px;translate:-50% 0;color:var(--gold);
+    filter:drop-shadow(0 0 6px rgba(241,223,174,.45))}
+  /* monogram medallion on each door: M on the left, A on the right */
+  .door-mono{position:absolute;left:50%;top:max(17%,120px);translate:-50% -50%;z-index:3;
+    width:clamp(84px,22vw,150px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    border:1.5px solid var(--gold);
+    background:radial-gradient(circle at 50% 38%,rgba(40,128,94,.55),rgba(8,34,26,.75) 75%);
+    box-shadow:0 0 0 4px rgba(10,42,33,.6),0 0 0 5px rgba(194,160,90,.45),0 0 26px rgba(241,223,174,.22),inset 0 0 22px rgba(0,0,0,.4);
+    animation:monoIn 1.3s cubic-bezier(.2,.7,.2,1) 1.1s backwards}
+  .door-mono::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px dotted rgba(241,223,174,.55)}
+  .door-mono b{font-family:var(--caps);font-weight:600;font-size:clamp(2.7rem,12vw,5.2rem);line-height:1;padding-top:.08em}
+  @keyframes monoIn{from{opacity:0;transform:scale(.7)}}
+  @media (min-width:900px) and (min-height:560px){.door-mono{top:50%}}
+  /* ring door-knockers flanking the seal */
+  .knob{position:absolute;top:calc(50% - 10px);width:16px;height:16px;border-radius:50%;z-index:4;
+    background:radial-gradient(circle at 35% 30%,#FFF3CF,#C9A45A 45%,#5E4520);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+  .knob::after{content:"";position:absolute;left:50%;top:10px;width:30px;height:30px;margin-left:-15px;border-radius:50%;
+    border:3px solid #C9A45A;border-top-color:#F1DFAE;border-bottom-color:#7A5A26;transform-origin:50% 0;
+    box-shadow:0 4px 6px rgba(0,0,0,.45),inset 0 1px 2px rgba(0,0,0,.35);animation:sway 4.5s ease-in-out infinite}
+  .door.l .knob{right:100px}.door.r .knob{left:100px}
+  @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  #gate.knock .knob::after{animation:clack .7s ease-in-out}
+  @keyframes clack{0%,100%{transform:rotate(0)}22%{transform:rotate(-24deg)}50%{transform:rotate(15deg)}78%{transform:rotate(-6deg)}}
   #gate.knock .door{animation:rattle .45s ease-in-out}
   @keyframes rattle{0%,100%{translate:0}25%{translate:1px}50%{translate:-1px}75%{translate:1px}}
-  /* seal: an eight-pointed Mughal star around an emerald medallion; each door holds a full copy clipped to its half */
-  .half{position:absolute;top:calc(50% - 64px);width:128px;height:128px;z-index:5;overflow:visible;
-    filter:drop-shadow(0 8px 14px rgba(0,0,0,.45)) drop-shadow(0 0 12px rgba(241,223,174,.25))}
-  .door.l .half{right:-64px;clip-path:inset(-20px 50% -20px -20px)}
-  .door.r .half{left:-64px;clip-path:inset(-20px -20px -20px 50%)}
+  /* wax seal: each door holds a full copy, clipped along a jagged crack so the halves fit together */
+  .half{position:absolute;top:calc(50% - 76px);width:152px;height:152px;z-index:5;overflow:visible;
+    filter:drop-shadow(0 10px 12px rgba(0,0,0,.5)) drop-shadow(0 1px 1px rgba(0,0,0,.4));
+    animation:stamp 1s cubic-bezier(.3,.7,.3,1) .9s backwards}
+  .door.l .half{right:-76px;
+    clip-path:polygon(-40px -40px,50% -40px,50% 0,47% 13%,50% 26%,45% 40%,49% 53%,44% 66%,49% 80%,47% 90%,50% 100%,50% calc(100% + 40px),-40px calc(100% + 40px))}
+  .door.r .half{left:-76px;
+    clip-path:polygon(50% -40px,calc(100% + 40px) -40px,calc(100% + 40px) calc(100% + 40px),50% calc(100% + 40px),50% 100%,47% 90%,49% 80%,44% 66%,49% 53%,45% 40%,50% 26%,47% 13%,50% 0)}
+  @keyframes stamp{0%{opacity:0;transform:scale(2.4) rotate(-14deg)}50%{opacity:1;transform:scale(.9) rotate(0)}
+    68%{transform:scale(1.05)}84%{transform:scale(.98)}100%{transform:none}}
+  #gate.knock .door.l .half{animation:splitL .75s cubic-bezier(.3,.7,.3,1) forwards}
+  #gate.knock .door.r .half{animation:splitR .75s cubic-bezier(.3,.7,.3,1) forwards}
+  @keyframes splitL{0%{transform:none}28%{transform:scale(.92)}50%{transform:scale(1.02)}100%{transform:translate(-5px,3px) rotate(-7deg)}}
+  @keyframes splitR{0%{transform:none}28%{transform:scale(.92)}50%{transform:scale(1.02)}100%{transform:translate(5px,-2px) rotate(6deg)}}
+  /* light escaping through the crack */
+  .crack{position:absolute;left:50%;top:calc(50% - 76px);width:152px;height:152px;margin-left:-76px;z-index:4;
+    pointer-events:none;overflow:visible;filter:drop-shadow(0 0 4px #FFF3CF) drop-shadow(0 0 10px rgba(241,223,174,.9));
+    transition:opacity .5s}
+  .crack polyline{fill:none;stroke:#FFF8E2;stroke-width:1.3;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1}
+  .crack .hair{stroke:#7A5A26;stroke-width:.8;stroke-dasharray:none;stroke-dashoffset:0;opacity:.9}
+  .crack:has(.hair){filter:none}
+  #gate.knock .crack{filter:drop-shadow(0 0 4px #FFF3CF) drop-shadow(0 0 10px rgba(241,223,174,.9))}
+  #gate.knock .crack polyline:not(.hair){animation:crack .4s cubic-bezier(.5,0,.5,1) .18s forwards}
+  @keyframes crack{to{stroke-dashoffset:0}}
   .gate-text{position:absolute;inset:0;z-index:6;text-align:center;pointer-events:none;transition:opacity .5s}
   .gt-top{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));
-    bottom:calc(50% + 84px);display:flex;flex-direction:column;align-items:center;gap:.6rem}
-  .gate-text .hint{position:absolute;left:50%;top:calc(50% + 112px);translate:-50% 0;white-space:nowrap}
+    bottom:calc(50% + 98px);display:flex;flex-direction:column;align-items:center;gap:.55rem}
+  .gt-top .bism{animation:rise 1s cubic-bezier(.2,.7,.2,1) .3s backwards}
+  .gt-top .orn{width:min(180px,50%);height:23px;color:var(--gold-hi);filter:drop-shadow(0 0 6px rgba(241,223,174,.5));
+    animation:rise 1s cubic-bezier(.2,.7,.2,1) .55s backwards,draw 2.4s ease .55s backwards}
+  .gt-top .gs{animation:rise 1s cubic-bezier(.2,.7,.2,1) .8s backwards}
+  .gate-text .hint{position:absolute;left:50%;top:calc(50% + 122px);translate:-50% 0;white-space:nowrap}
   .gate-text .bism{font-family:var(--arabic);font-size:clamp(1.25rem,5vw,1.6rem);color:var(--gold-hi);direction:rtl;
     text-shadow:0 2px 8px rgba(0,0,0,.9),0 0 16px rgba(241,223,174,.5)}
-  .gate-text .gs{font-style:italic;font-size:1.2rem;color:#FFF3DC;text-shadow:0 2px 8px rgba(0,0,0,.95)}
-  .gate-text .hint{font-family:var(--caps);font-size:.75rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-hi);
-    background:rgba(10,42,33,.8);border:1px solid var(--gold);border-radius:999px;padding:.55rem 1.2rem;
-    animation:bob 2.2s ease-in-out infinite;text-shadow:0 0 10px rgba(241,223,174,.6)}
+  .gate-text .gs{font-style:italic;font-size:1.25rem;color:#FFF3DC;text-shadow:0 2px 8px rgba(0,0,0,.95)}
+  .gate-text .hint{font-family:var(--caps);font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-hi);
+    background:linear-gradient(rgba(16,62,47,.92),rgba(6,30,23,.92));border:1px solid var(--gold);border-radius:999px;
+    padding:.6rem 1.3rem .6rem 1.62rem;box-shadow:0 0 0 3px rgba(10,42,33,.6),0 0 0 4px rgba(194,160,90,.35),0 0 22px rgba(241,223,174,.25);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) 1.9s backwards,bob 2.4s ease-in-out 2.8s infinite;text-shadow:0 0 10px rgba(241,223,174,.6)}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  /* shockwave when the seal lands, then gentle rings inviting a tap */
+  .shock,.pulse{position:absolute;left:50%;top:50%;width:156px;height:156px;margin:-78px 0 0 -78px;border-radius:50%;opacity:0}
+  .shock{border:2px solid var(--gold-hi);box-shadow:0 0 18px rgba(241,223,174,.7);animation:shock 1.1s ease-out 1.38s both}
+  @keyframes shock{0%{opacity:0;transform:scale(.85)}6%{opacity:1}100%{opacity:0;transform:scale(2.6)}}
+  .pulse{border:1.5px solid rgba(241,223,174,.7);animation:pulse 3s ease-out 2.4s infinite}
+  .pulse.p2{animation-delay:3.9s}
+  @keyframes pulse{0%{opacity:.85;transform:scale(.95)}100%{opacity:0;transform:scale(1.75)}}
   #gate.knock .gate-text{opacity:0}
-  #gate.open .door.l{transform:rotateY(-102deg)}
-  #gate.open .door.r{transform:rotateY(102deg)}
+  #gate.open .door.l{transform:rotateY(-104deg)}
+  #gate.open .door.r{transform:rotateY(104deg)}
   #gate.open .door::after{opacity:1}
-  #gate.open .seam{opacity:0}
-  #gate.open .portal{animation:flare 2.3s ease forwards}
+  #gate.open .seam,#gate.open .crack,#gate.open .portal::after{opacity:0}
+  #gate.open .rays{opacity:1}
+  #gate.open .portal{animation:flare 2.4s ease forwards}
   @keyframes flare{to{filter:brightness(1.2)}}
   #gate.open,#gate.through{pointer-events:none}
 
@@ -380,42 +449,72 @@
   </symbol>
   <symbol id="pin" viewBox="0 0 24 24"><path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-14 0c0 4 3 7 7 10Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="11" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   <defs>
-    <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFF3CF"/><stop offset=".35" stop-color="#D9B565"/>
-      <stop offset=".65" stop-color="#A9843F"/><stop offset="1" stop-color="#E8CC86"/>
+    <linearGradient id="sealFoil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF3CF"/><stop offset=".4" stop-color="#E2C27A"/>
+      <stop offset=".7" stop-color="#B08A45"/><stop offset="1" stop-color="#F1DFAE"/>
     </linearGradient>
-    <linearGradient id="sealFoil" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#C9A45A"/><stop offset=".45" stop-color="#FFF3CF"/><stop offset="1" stop-color="#D4B06A"/>
-    </linearGradient>
-    <radialGradient id="sealGreen" cx=".4" cy=".35" r=".75">
-      <stop offset="0" stop-color="#1B6248"/><stop offset=".6" stop-color="#0F3B2E"/><stop offset="1" stop-color="#082219"/>
+    <!-- seal: lit from the top-left -->
+    <radialGradient id="waxBody" cx=".36" cy=".3" r=".8">
+      <stop offset="0" stop-color="#FFF0C2"/><stop offset=".38" stop-color="#E3C374"/>
+      <stop offset=".75" stop-color="#B8913F"/><stop offset="1" stop-color="#7E5E22"/>
     </radialGradient>
+    <radialGradient id="waxPress" cx=".62" cy=".66" r=".8">
+      <stop offset="0" stop-color="#D9B562"/><stop offset=".6" stop-color="#C29D4C"/><stop offset="1" stop-color="#9C7A34"/>
+    </radialGradient>
+    <linearGradient id="rimIn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5A4115"/><stop offset=".5" stop-color="#9C7A34"/><stop offset="1" stop-color="#FFF3CF"/>
+    </linearGradient>
+    <linearGradient id="rimOut" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF6D8"/><stop offset=".45" stop-color="#D4B06A"/><stop offset="1" stop-color="#5E4520"/>
+    </linearGradient>
+    <linearGradient id="monoInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1F06"/><stop offset="1" stop-color="#4E3910"/></linearGradient>
+    <radialGradient id="waxGloss" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <path id="sealRing" d="M-39.885 -7.033 A40.5 40.5 0 1 1 -39.897 -6.963"/>
   </defs>
-  <symbol id="seal" viewBox="0 0 128 128">
-    <g transform="translate(64 64)">
-      <!-- outer star: two squares, tips at r=60 -->
-      <g fill="url(#sealGold)" stroke="#8C6A2E" stroke-width="1">
-        <rect x="-42.4" y="-42.4" width="84.8" height="84.8"/>
-        <rect x="-42.4" y="-42.4" width="84.8" height="84.8" transform="rotate(45)"/>
+  <symbol id="finial" viewBox="0 0 60 40">
+    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 4 C36 13 36 24 30 33 C24 24 24 13 30 4Z"/>
+      <path d="M30 33 C22 31 13 25 9 15 C19 15 26 21 30 33Z"/>
+      <path d="M30 33 C38 31 47 25 51 15 C41 15 34 21 30 33Z"/>
+      <path d="M8 37 H52"/>
+    </g>
+    <circle cx="30" cy="2" r="1.6" fill="currentColor"/>
+  </symbol>
+  <!-- gold wax seal with an M·A monogram; fonts set inline because page CSS does not reach into a <use> shadow tree -->
+  <symbol id="seal" viewBox="0 0 160 160">
+    <g transform="translate(80 80)">
+      <!-- organic pour -->
+      <path fill="url(#waxBody)" stroke="#5E4520" stroke-opacity=".4" stroke-width="1"
+        d="M60.0 0.0C60.4 5.5 59.2 11.4 57.9 17.0C56.5 22.5 55.0 28.7 51.8 33.3C48.6 37.9 43.0 40.9 38.5 44.4C34.0 47.9 29.8 51.8 24.8 54.3C19.8 56.8 14.1 58.9 8.5 59.4C3.0 59.9 -2.3 57.3 -8.2 57.3C-14.2 57.3 -21.9 61.4 -27.2 59.5C-32.4 57.5 -35.8 50.2 -39.6 45.7C-43.4 41.1 -47.3 37.0 -50.1 32.2C-52.9 27.4 -54.7 22.0 -56.5 16.6C-58.4 11.2 -60.5 5.8 -61.4 0.0C-62.3 -5.8 -63.8 -12.9 -61.7 -18.1C-59.6 -23.3 -52.4 -26.8 -48.7 -31.3C-45.0 -35.8 -43.3 -41.7 -39.3 -45.3C-35.2 -49.0 -29.5 -50.9 -24.4 -53.4C-19.3 -55.9 -14.2 -58.9 -8.7 -60.2C-3.1 -61.5 3.2 -62.1 8.8 -61.2C14.4 -60.3 20.0 -57.5 25.1 -54.9C30.1 -52.2 35.2 -49.2 39.2 -45.3C43.3 -41.4 46.4 -36.4 49.1 -31.6C51.8 -26.7 53.6 -21.5 55.4 -16.3C57.2 -11.0 59.5 -5.5 60.0 0.0Z"/>
+      <!-- raised lip pushed up by the stamp -->
+      <circle r="51" fill="none" stroke="url(#rimOut)" stroke-width="3.5" opacity=".75"/>
+      <!-- pressed impression -->
+      <circle r="48.5" fill="url(#waxPress)" stroke="url(#rimIn)" stroke-width="1.8"/>
+      <!-- embossed ring lettering -->
+      <g font-family="Cinzel,Georgia,serif" font-size="7" font-weight="600">
+        <text fill="#4A3410" opacity=".75" transform="translate(.6 .7)"><textPath href="#sealRing" textLength="248" lengthAdjust="spacing">MAROOF • ADEEBA • XXIX • XI • MMXXVI •</textPath></text>
+        <text fill="#FFF6D8" opacity=".4" transform="translate(-.5 -.5)"><textPath href="#sealRing" textLength="248" lengthAdjust="spacing">MAROOF • ADEEBA • XXIX • XI • MMXXVI •</textPath></text>
+        <text fill="#D8B866"><textPath href="#sealRing" textLength="248" lengthAdjust="spacing">MAROOF • ADEEBA • XXIX • XI • MMXXVI •</textPath></text>
       </g>
-      <!-- inner engraved star -->
-      <g fill="none" stroke="#8C6A2E" stroke-width=".8" opacity=".7">
-        <rect x="-36" y="-36" width="72" height="72"/>
-        <rect x="-36" y="-36" width="72" height="72" transform="rotate(45)"/>
+      <circle r="37.5" fill="none" stroke="#4A3410" stroke-width="1" opacity=".55" transform="translate(.5 .5)"/>
+      <circle r="37.5" fill="none" stroke="#FFF3CF" stroke-width=".7" opacity=".45"/>
+      <!-- stamped monogram: debossed dark-bronze capitals, centred -->
+      <g font-family="Cinzel,'Trajan Pro',Georgia,serif" font-size="37" font-weight="700" text-anchor="middle">
+        <g fill="#FFFBEA" transform="translate(1 1.2)"><text x="-16" y="13">M</text><text x="17" y="13">A</text></g>
+        <g fill="url(#monoInk)" stroke="#2A1C05" stroke-width=".5"><text x="-16" y="13">M</text><text x="17" y="13">A</text></g>
       </g>
-      <!-- beads at the tips -->
-      <g fill="#FFF3CF" stroke="#8C6A2E" stroke-width=".6">
-        <circle cx="0" cy="-54" r="2.2"/><circle cx="0" cy="54" r="2.2"/><circle cx="-54" cy="0" r="2.2"/><circle cx="54" cy="0" r="2.2"/>
-        <circle cx="38.2" cy="-38.2" r="2.2"/><circle cx="-38.2" cy="-38.2" r="2.2"/><circle cx="38.2" cy="38.2" r="2.2"/><circle cx="-38.2" cy="38.2" r="2.2"/>
+      <g fill="none" stroke-linecap="round" stroke-width="1">
+        <path d="M-15 22 H-5 M5 22 H15" stroke="#FFF8DC" opacity=".8" transform="translate(.5 .6)"/>
+        <path d="M-15 22 H-5 M5 22 H15" stroke="#5E4520"/>
       </g>
-      <!-- medallion -->
-      <circle r="35" fill="url(#sealGreen)" stroke="url(#sealGold)" stroke-width="3"/>
-      <circle r="30" fill="none" stroke="#C2A05A" stroke-width=".7" stroke-dasharray="1.2 2.2"/>
-      <!-- fonts set inline: page CSS does not reach into a <use> shadow tree -->
-      <g font-family="'Pinyon Script','Snell Roundhand',cursive" font-size="35" fill="url(#sealFoil)" text-anchor="middle">
-        <text x="-13" y="9">M</text><text x="15" y="9">A</text>
-      </g>
-      <text x="1" y="24" font-family="Cinzel,Georgia,serif" font-size="10" font-weight="600" fill="#E8CC86" text-anchor="middle">&amp;</text>
+      <path d="M0 19.2 L2.8 22 L0 24.8 L-2.8 22 Z" fill="#5E4520"/>
+      <path d="M-15 -21 H-5 M5 -21 H15" fill="none" stroke="#5E4520" stroke-width="1" stroke-linecap="round"/>
+      <path d="M0 -23.8 L2.8 -21 L0 -18.2 L-2.8 -21 Z" fill="#5E4520"/>
+      <!-- glossy highlight -->
+      <ellipse cx="-24" cy="-33" rx="22" ry="9" transform="rotate(-38 -24 -33)" fill="url(#waxGloss)" opacity=".55"/>
+      <ellipse cx="38" cy="40" rx="6" ry="2.5" transform="rotate(-45 38 40)" fill="url(#waxGloss)" opacity=".3"/>
     </g>
   </symbol>
 </svg>
@@ -426,13 +525,17 @@
 <div id="gate" role="button" tabindex="0" aria-label="Open the gates to the wedding invitation">
   <div class="stage">
     <div class="portal">
+      <div class="rays"></div>
       <div class="seam"></div>
-      <div class="door l"><div class="arch"></div><span class="knob"></span><svg class="half" viewBox="0 0 128 128" aria-hidden="true"><use href="#seal"/></svg></div>
-      <div class="door r"><div class="arch"></div><span class="knob"></span><svg class="half" viewBox="0 0 128 128" aria-hidden="true"><use href="#seal"/></svg></div>
+      <div class="door l"><div class="arch"><svg class="finial" aria-hidden="true"><use href="#finial"/></svg></div><span class="door-mono" aria-hidden="true"><b class="foil">M</b></span><span class="knob"></span><svg class="half" viewBox="0 0 160 160" aria-hidden="true"><use href="#seal"/></svg></div>
+      <div class="door r"><div class="arch"><svg class="finial" aria-hidden="true"><use href="#finial"/></svg></div><span class="door-mono" aria-hidden="true"><b class="foil">A</b></span><span class="knob"></span><svg class="half" viewBox="0 0 160 160" aria-hidden="true"><use href="#seal"/></svg></div>
+      <svg class="crack" viewBox="0 0 100 100" aria-hidden="true"><polyline class="hair" points="49.5,6 47,13 50,26 45,40 49,53 44,66 49,80 47,90 49.5,94"/><polyline pathLength="1" points="50,0 47,13 50,26 45,40 49,53 44,66 49,80 47,90 50,100"/></svg>
     </div>
     <div class="gate-text">
+      <span class="shock"></span><span class="pulse"></span><span class="pulse p2"></span>
       <div class="gt-top">
         <p class="bism" lang="ar">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+        <svg class="orn" aria-hidden="true"><use href="#orn"/></svg>
         <p class="gs">We have an announcement…</p>
       </div>
       <p class="hint">Tap to open the gates</p>
@@ -714,20 +817,24 @@
     if(opened) return; opened = true;
     playSong();
     gate.classList.add("knock");
+    /* seal is pressed, then cracks along its seam before the doors swing */
+    setTimeout(function(){ burst(W/2, H/2, "spark", 26); }, reduce ? 0 : 380);
     setTimeout(function(){
       gate.classList.add("open");
       burst(W/2, H/2, "spark", 70);
-    }, reduce ? 0 : 500);
+    }, reduce ? 0 : 750);
     setTimeout(function(){
       gate.classList.add("through");
       document.body.classList.remove("locked");
       document.body.classList.add("is-open");
       startBook();
       burst(W/2, H*0.4, "heart", 40);
-    }, reduce ? 50 : 2100);
-    setTimeout(function(){ gate.hidden = true; }, reduce ? 300 : 3400);
-    setTimeout(showCue, reduce ? 400 : 4200);
+    }, reduce ? 50 : 2350);
+    setTimeout(function(){ gate.hidden = true; }, reduce ? 300 : 3650);
+    setTimeout(showCue, reduce ? 400 : 4450);
   }
+  /* gold dust as the wax seal lands on the doors */
+  setTimeout(function(){ if(!opened) burst(W/2, H/2, "spark", 40); }, 1400);
 
   /* ================= scroll cue ================= */
   var cue = document.getElementById("scrollCue"), cueDone = false;
